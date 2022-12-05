@@ -3,6 +3,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 
 class DatabaseHelper(private val context: Context?) :
@@ -50,8 +51,8 @@ class DatabaseHelper(private val context: Context?) :
         val cv = ContentValues()
 
         cv.put(COLUMN_IS_DONE,is_done)
-        db.update(TABLE_NAME,cv,"id=?", arrayOf(arrayOf(id).toString()))
-
+        var str_id = id.toString()
+        db.update(TABLE_NAME,cv,"id=?", arrayOf(str_id))
     }
 
 

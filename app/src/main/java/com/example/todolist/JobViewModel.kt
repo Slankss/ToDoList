@@ -3,7 +3,10 @@ package com.example.todolist
 import DatabaseHelper
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.capitalize
 import androidx.lifecycle.MutableLiveData
@@ -21,12 +24,11 @@ class JobViewModel(context : Context) : ViewModel() {
     }
 
     fun getJobs() {
-
-
-        var cursor = db.readAllData()
+        val cursor = db.readAllData()
+        jobList.clear()
         if (cursor != null) {
             if(cursor.count != 0){
-                jobList.clear()
+
 
                 while(cursor.moveToNext()){
                     val job = Job(cursor.getInt(0),cursor.getString(1),cursor.getInt(2))
@@ -45,25 +47,20 @@ class JobViewModel(context : Context) : ViewModel() {
             val lower_text = job_text.trim().replaceFirstChar { c: Char -> c.uppercase() }
 
             db.addJob(index,lower_text,0)
+
             getJobs()
-
         }
-
     }
 
     fun changeIsDone(id : Int,is_done : Int){
-
         db.update_is_done(id,is_done)
         getJobs()
     }
 
     fun clearJob(){
-        runBlocking {
-            db.deleteAllJob()
-        }
-        getJobs()
-        //jobList.clear()
 
+        db.deleteAllJob()
+        getJobs()
     }
 }
 

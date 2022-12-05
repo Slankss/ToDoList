@@ -1,11 +1,9 @@
 package com.example.todolist
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,10 +13,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -191,31 +191,42 @@ fun BottomCard(jobList: SnapshotStateList<Job>){
 fun Item(job : Job){
 
     var is_done by remember { mutableStateOf(false)}
-    //is_done = when(job.job_is_done){
-    //   1 -> true
-    //    else -> {false}
-    //}
+    is_done = when(job.job_is_done){
+        1 -> true
+        else -> {false}
+    }
 
     Row(modifier = Modifier
         .fillMaxWidth()
-        .clickable {}
+        .clickable {},
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
         ){
         Text(text = "${job.job_order})", color = Color.White)
-        Text(text = job.job, color = Color.White, modifier = Modifier.padding(start = 10.dp))
-        Checkbox(checked = is_done , onCheckedChange = {
+        val special_text_decoration = when(is_done){
+            true -> TextDecoration.LineThrough
+            false -> TextDecoration.None
+        }
+
+        Text(text = job.job,color = Color.White,
+            modifier = Modifier.padding(start = 10.dp).weight(2f),
+            textDecoration = special_text_decoration
+        )
+
+        Checkbox(modifier = Modifier.scale(1.25f),
+            checked = is_done , onCheckedChange = {
             is_done = it
             when(it){
                 true -> viewModel.changeIsDone(job.job_order,1)
                 false -> viewModel.changeIsDone(job.job_order,0)
             }
         })
-        Text(text = job.job_is_done.toString(), color = Color.Red
-        )
+
     }
 
-    Spacer(modifier = Modifier.height(15.dp))
-
+    Spacer(modifier = Modifier.height(10.dp))
 }
+
 
 
 
