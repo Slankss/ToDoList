@@ -1,6 +1,6 @@
 # To-Do List Application
 
-*Basic to do list application
+### *Basic to do list application*
 
 Using Technologies
 - Jetpack Compose
